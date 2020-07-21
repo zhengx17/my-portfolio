@@ -14,7 +14,7 @@
 
 package com.google.sps.servlets;
 
-import com.google.sps.data.ServerStats;
+import com.google.sps.data.CommentStats;
 import com.google.gson.Gson;
 import java.io.IOException;
 import java.util.Date;
@@ -27,44 +27,32 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet("/data")
 public class DataServlet extends HttpServlet {
 
-  private final Date startTime = new Date();
-  
+  private CommentStats cmt = new CommentStats();
+
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    // Calculate server stats
-    Date currentTime = new Date();
-    long maxMemory = Runtime.getRuntime().maxMemory();
-    long usedMemory = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
-
-    // Convert the server stats to JSON
-    ServerStats serverStats = new ServerStats(startTime, currentTime, maxMemory, usedMemory);
-    String json = convertToJson(serverStats);
-
-    // Send the JSON as the response
-    response.setContentType("application/json;");
+    response.setContentType("application/json");
+    String json = new Gson().toJson(cmt);
     response.getWriter().println(json);
   }
 
-  private String convertToJson(ServerStats serverStats) {
-    String json = "{";
-    json += "\"startTime\": ";
-    json += "\"" + serverStats.getStartTime() + "\"";
-    json += ", ";
-    json += "\"currentTime\": ";
-    json += "\"" + serverStats.getCurrentTime() + "\"";
-    json += ", ";
-    json += "\"maxMemory\": ";
-    json += serverStats.getMaxMemory();
-    json += ", ";
-    json += "\"usedMemory\": ";
-    json += serverStats.getUsedMemory();
-    json += "}";
-    return json;
+  @Override
+  public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+
+    // Get the input from the form.
+    String playerComment = getComment(request);
+
+    cmt.addComment(playerComment);
+
+    // Redirect back to the HTML page.
+    response.sendRedirect("/index.html");
   }
 
-  private String convertToJsonUsingGson(ServerStats serverStats) {
-    Gson gson = new Gson();
-    String json = gson.toJson(serverStats);
-    return json;
+  /** Returns the choice entered by the player, or -1 if the choice was invalid. */
+  private String getComment(HttpServletRequest request) {
+    // Get the input from the form.
+    String CommentString = request.getParameter("comments");
+
+    return CommentString;
   }
 }

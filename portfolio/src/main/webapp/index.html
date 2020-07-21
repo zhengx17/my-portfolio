@@ -6,7 +6,7 @@
     <link rel="stylesheet" href="style.css">
     <script src="script.js"></script>
   </head>
-  <body>
+  <body onload="getSubtractionGame()">
     <div id="content">
       <h1>Xing's Portfolio</h1>
       <p>This is my portfolio.</p>
@@ -23,12 +23,20 @@
 
       <p>Click <a href="image.html">here</a> to see some interesting pictures!</p>
       
-      <h1>Data</h1>
-      <p>Click here to see the data page:</p>
-      <button onclick="getData()">Fetch data!</button>
-      <div id="data-container"></div>
 
+      <br/><br/>
+      <h1>Comments</h1>
+      <p>Leave your comments for my portfolio here:</p>
+
+      <ul id="history"></ul>
+
+      <form action="/data" method="POST">
+        <p>Add Comment:</p>
+        <input type="text" name="comments" value="">
+        <br/>
+
+        <input type="submit" />
+      </form>
     </div>
-     </div>
   </body>
 </html>

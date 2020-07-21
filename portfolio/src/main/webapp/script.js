@@ -27,23 +27,15 @@ function addRandomGreeting() {
   greetingContainer.innerText = greeting;
 }
 
-async function getData() {
-    fetch('/data').then(response => response.json()).then((stats) => {
-    // stats is an object, not a string, so we have to
-    // reference its fields to create HTML content
+function getSubtractionGame() {
+  fetch('/data').then(response => response.json()).then((cmt) => {
 
-    const statsListElement = document.getElementById('data-container');
-    statsListElement.innerHTML = '';
-    statsListElement.appendChild(
-        createListElement('Start time: ' + stats.startTime));
-    statsListElement.appendChild(
-        createListElement('Current time: ' + stats.currentTime));
-    statsListElement.appendChild(
-        createListElement('Max memory: ' + stats.maxMemory));
-    statsListElement.appendChild(
-        createListElement('Used memory: ' + stats.usedMemory));
+    // Build the list of history entries.
+    const historyEl = document.getElementById('history');
+    cmt.history.forEach((line) => {
+      historyEl.appendChild(createListElement(line));
+    });
   });
-
 }
 
 /** Creates an <li> element containing text. */
